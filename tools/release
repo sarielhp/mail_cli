@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative 'tooling'
+
+# Adapted from the template. The template treats installation as a separate
+# request (`--install`); here a release installs the built binary to ~/bin,
+# because the installed binary is what a release is for. Pass --no-install to
+# publish the version, the commit and the tag without touching ~/bin.
+Tooling.entry do
+  install_requested = ARGV.first != '--no-install'
+  ARGV.shift unless install_requested
+  clean = Tooling.git('status', '--porcelain').empty?
+  # The message is the commit for pending work, so a clean tree needs none.
+  usable = ARGV.length == 1 && !ARGV.first.strip.empty?
+  abort 'Usage: tools/release [--no-install] <message>' unless usable || (clean && ARGV.empty?)
+  # Tooling.release commits pending work first, which needs work to commit. A
+  # release with a clean tree versions what is already committed, so run the
+  # bump script rather than failing on an empty commit. It must be the script,
+  # not Tooling.bump: publishing the v* tag is that entry point's step.
+  if clean
+    puts 'Nothing to commit; releasing the current tree'
+    Tooling.script('bump')
+    Tooling.script('install') if install_requested
+  else
+    Tooling.release(ARGV.first, install_requested)
+  end
+end

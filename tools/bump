@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative 'tooling'
+
+Tooling.entry do
+  abort 'Usage: tools/bump [--resume]' unless ARGV.empty? || ARGV == ['--resume']
+  ARGV.empty? ? Tooling.bump : Tooling.resume
+  # The Go profile stops at a verified push; this repository releases on a tag,
+  # so publish it after the push (see tools/tag).
+  begin
+    Tooling.script('tag')
+  rescue StandardError => e
+    # The branch push is verified and the release state is gone, so neither
+    # rerunning bump (a second version) nor --resume applies: only the tag is left.
+    raise "#{e.message}\nBranch pushed and verified; the tag is not. Rerun tools/tag."
+  end
+end

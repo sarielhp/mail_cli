@@ -1,0 +1,49 @@
+# Maintainer: Sariel Har-Peled <sariel@gmail.com>
+#
+# Template for the AUR `mail-cli` package. Releases are source-only, so this
+# builds the binary from the tagged source tarball -- there is no prebuilt
+# binary to install, which is why this is no longer a `-bin` package.
+#
+# This file is not the AUR submission; it is the copy to start from. Before
+# submitting:
+#   1. bump pkgver to the released version (no leading v) and reset pkgrel to 1,
+#   2. refresh the checksum -- run `updpkgsums` inside the directory,
+#   3. run `makepkg --printsrcinfo > .SRCINFO` and commit both files.
+
+pkgname=mail-cli
+pkgver=0.7.46
+pkgrel=1
+pkgdesc='Modern API-first terminal email client for Gmail, Microsoft 365, and Fastmail.'
+arch=('x86_64' 'aarch64')
+url='https://github.com/sarielhp/mail_cli'
+license=('MIT')
+provides=('mail_cli')
+conflicts=('mail_cli' 'mail-cli-bin')
+makedepends=('go')
+options=('!strip')
+
+source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/refs/tags/v${pkgver}.tar.gz")
+sha256sums=('SKIP')
+
+build() {
+  cd "${srcdir}/mail_cli-${pkgver}"
+  export CGO_ENABLED=0
+  go build -trimpath -ldflags "-s -w" -o mail_cli .
+
+  # The completion scripts are gitignored build output, so generate them here
+  # rather than expecting them in the tarball; package() installs completions/.
+  ./tools/gen_completions.sh
+}
+
+package() {
+  cd "${srcdir}/mail_cli-${pkgver}"
+  install -Dm755 mail_cli "${pkgdir}/usr/bin/mail_cli"
+  install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+
+  install -Dm644 completions/mail_cli.bash \
+    "${pkgdir}/usr/share/bash-completion/completions/mail_cli"
+  install -Dm644 completions/_mail_cli \
+    "${pkgdir}/usr/share/zsh/site-functions/_mail_cli"
+  install -Dm644 completions/mail_cli.fish \
+    "${pkgdir}/usr/share/fish/vendor_completions.d/mail_cli.fish"
+}

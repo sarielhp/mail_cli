@@ -1,0 +1,26 @@
+// Standard formatting and terminal output
+fmt.Fprint
+fmt.Fprintf
+fmt.Fprintln
+fmt.Print
+fmt.Printf
+fmt.Println
+fmt.Sprint
+fmt.Sprintf
+fmt.Sprintln
+
+// Color package output
+(*github.com/fatih/color.Color).Println
+(*github.com/fatih/color.Color).Printf
+(*github.com/fatih/color.Color).Print
+
+// Resource close / sync / cleanup
+(*os.File).Close
+(*os.File).Sync
+(*os.Process).Kill
+(io.Closer).Close
+(io.ReadCloser).Close
+(net.Listener).Close
+(*net/http.Server).Shutdown
+os.Remove
+os.RemoveAll

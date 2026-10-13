@@ -1,0 +1,32 @@
+name: Release
+
+# A release is source-only. GitHub attaches the source tarball and zipball to
+# every release itself, so nothing here compiles anything and no binary is
+# published -- the job only creates the release object, with notes generated
+# from the commits since the previous release.
+#
+# That also makes the run trivially quick, which is why any v* tag triggers it:
+# there is no longer an expensive build to gate behind milestone tags.
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Publish Source-Only Release
+    runs-on: ubuntu-latest
+    steps:
+      # No checkout and no Go toolchain: --generate-notes is computed by the API
+      # from the commit range, and GH_REPO supplies the repository identity that
+      # a checkout would otherwise provide. --verify-tag keeps a misdirected
+      # dispatch (a branch ref) from inventing a release for it.
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: gh release create "$GITHUB_REF_NAME" --generate-notes --verify-tag

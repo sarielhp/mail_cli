@@ -1,0 +1,28 @@
+From: Example <no-reply@example.com>
+To: tester@example.com
+Subject: Your sign-in link is here
+Date: Fri, 09 Oct 2026 15:56:25 +0000
+Message-ID: <interactive-links@example.com>
+MIME-Version: 1.0
+Content-Type: text/html; charset=iso-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html><head><meta http-equiv=3D"Content-Type" content=3D"t=
+ext/html; charset=3Diso-8859-1"></head><body>
+<p>Sign in to Example</p>
+<p>Click the button below to finish signing in. This link expires in 10 m=
+inutes.</p>
+<p><a href=3D"https://login.example.com/magic-link#0a3ce7a90a3ce7a90a3ce7=
+a90a3ce7a90a3ce7a90a3ce7a90a3ce7a90a3ce7a9:c2lnbi1pbi10ZXN0QGV4YW1wbGUuY2=
+9t" style=3D"display:inline-block;padding:14px 36px">Sign in</a></p>
+<p>Need a hand? Contact <a href=3D"https://urldefense.com/v3/__https://cl=
+ick.example.net/ls/click?upn=3Du001.rFcAmKXLOm9u6wLRWHIUY-2Bu001.rFcAmKXL=
+Om9u6wLRWHIUY-2Bu001.rFcAmKXLOm9u6wLRWHIUY-2Bu001.rFcAmKXLOm9u6wLRWHIUY-2=
+Bu001.rFcAmKXLOm9u6wLRWHIUY-2Bu001.rFcAmKXLOm9u6wLRWHIUY-2Bu001.rFcAmKXLO=
+m9u6wLRWHIUY-2Bu001.rFcAmKXLOm9u6wLRWHIUY-2B__;!!abc!def$">Example Suppor=
+t</a>.</p>
+<p><a href=3D"https://social.example.org/follow?campaign=3Dsignin-footer-=
+signin-footer-signin-footer-signin-footer-signin-footer-signin-footer-ico=
+n"><img alt=3D"" src=3D"https://social.example.org/icon.png" width=3D"20"=
+ height=3D"20"></a></p>
+</body></html>

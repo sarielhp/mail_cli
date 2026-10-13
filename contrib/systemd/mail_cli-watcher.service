@@ -1,0 +1,23 @@
+[Unit]
+Description=mail_cli background mail watcher
+Documentation=https://github.com/sarielhp/mail_cli
+# The watcher reads the same config and cache as the TUI, so it needs the
+# network and nothing else. It does not require the graphical session, but the
+# desktop notifications it sends do.
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Adjust the path if the binary is not installed in ~/bin.
+ExecStart=%h/bin/mail_cli watch
+# Restart on any exit, including a crash, but leave a clean SIGTERM exit alone.
+Restart=on-failure
+RestartSec=30
+# The watcher itself never forks or writes a PID file; systemd tracks this
+# process directly.
+KillSignal=SIGTERM
+TimeoutStopSec=20
+
+[Install]
+WantedBy=default.target

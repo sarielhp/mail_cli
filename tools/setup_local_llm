@@ -1,0 +1,148 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'open3'
+require 'pathname'
+require 'fileutils'
+
+# ANSI color helper
+module Color
+  GREEN  = "\e[32m"
+  CYAN   = "\e[36m"
+  YELLOW = "\e[33m"
+  RED    = "\e[31m"
+  BOLD   = "\e[1m"
+  RESET  = "\e[0m"
+
+  def self.info(msg)
+    puts "#{CYAN}[*]#{RESET} #{msg}"
+  end
+
+  def self.success(msg)
+    puts "#{GREEN}[+]#{RESET} #{msg}"
+  end
+
+  def self.warn(msg)
+    puts "#{YELLOW}[!]#{RESET} #{msg}"
+  end
+
+  def self.error(msg)
+    warn "#{RED}[-] ERROR:#{RESET} #{msg}"
+  end
+end
+
+def find_env_file(cli_arg)
+  candidates = []
+  candidates << cli_arg if cli_arg
+  root = Pathname.new(__dir__).parent
+  candidates << root.join('info_private', '.env')
+  candidates << root.join('private_info', '.env')
+  candidates << root.join('.env')
+
+  candidates.each do |c|
+    path = Pathname.new(c)
+    return path if path.file?
+  end
+  nil
+end
+
+def parse_env_file(file_path)
+  env = {}
+  File.foreach(file_path) do |line|
+    line = line.strip
+    next if line.empty? || line.start_with?('#')
+
+    key, val = line.split('=', 2)
+    next unless key && val
+
+    key = key.strip
+    val = val.strip
+    # Strip surrounding quotes if present
+    val = val[1..-2] if (val.start_with?('"') && val.end_with?('"')) || (val.start_with?("'") && val.end_with?("'"))
+    env[key] = val
+  end
+  env
+end
+
+def find_mail_cli_command
+  root = Pathname.new(__dir__).parent
+  binary = root.join('mail_cli')
+  return binary.to_s if binary.executable?
+
+  # Check PATH
+  path_bin = `which mail_cli 2>/dev/null`.strip
+  return path_bin unless path_bin.empty?
+
+  # Fallback to `go run main.go`
+  "go run #{root.join('main.go')}"
+end
+
+def run_config_set(cmd_base, key, val)
+  cmd = "#{cmd_base} config set #{key} #{val.inspect}"
+  stdout, stderr, status = Open3.capture3(cmd)
+  if status.success?
+    Color.success("Set #{key} = #{val}")
+  else
+    Color.error("Failed setting #{key}: #{stderr.strip.empty? ? stdout.strip : stderr.strip}")
+    false
+  end
+end
+
+def main
+  puts "#{Color::BOLD}=== mail_cli Local LLM Setup ===#{Color::RESET}\n"
+
+  env_file = find_env_file(ARGV[0])
+  unless env_file
+    Color.error("Could not find .env file in info_private/.env, private_info/.env, or .env")
+    puts "\nPlease create info_private/.env with the following keys:"
+    puts "  LLM_ENDPOINT=http://localhost:4000/v1/chat/completions"
+    puts "  LLM_API_KEY=sk-litellm-master-key"
+    puts "  LLM_MODEL=llama3.1"
+    puts "  LLM_TEMPERATURE=0.2"
+    puts "  LLM_MAX_TOKENS=350"
+    exit 1
+  end
+
+  Color.info("Reading configuration from #{env_file}...")
+  env_vars = parse_env_file(env_file)
+
+  mail_cli_cmd = find_mail_cli_command
+  Color.info("Using mail_cli runner: #{mail_cli_cmd}")
+
+  key_mappings = {
+    'LLM_ENDPOINT'      => 'llm_endpoint',
+    'ENDPOINT'          => 'llm_endpoint',
+    'LLM_API_KEY'       => 'llm_api_key',
+    'API_KEY'           => 'llm_api_key',
+    'LLM_MODEL'         => 'llm_model',
+    'MODEL'             => 'llm_model',
+    'LLM_TEMPERATURE'   => 'llm_temperature',
+    'TEMPERATURE'       => 'llm_temperature',
+    'LLM_MAX_TOKENS'    => 'llm_max_tokens',
+    'MAX_TOKENS'        => 'llm_max_tokens',
+    'LLM_SYSTEM_PROMPT' => 'llm_system_prompt',
+    'SYSTEM_PROMPT'     => 'llm_system_prompt'
+  }
+
+  applied_keys = {}
+
+  key_mappings.each do |env_key, config_key|
+    next if applied_keys[config_key]
+    val = env_vars[env_key]
+    next unless val && !val.empty?
+
+    run_config_set(mail_cli_cmd, config_key, val)
+    applied_keys[config_key] = true
+  end
+
+  if applied_keys.empty?
+    Color.warn("No recognized LLM environment variables found in #{env_file}")
+  else
+    Color.success("Applied #{applied_keys.size} configuration setting(s).\n")
+  end
+
+  Color.info("Displaying updated configuration:\n")
+  system("#{mail_cli_cmd} config show")
+end
+
+main if __FILE__ == $PROGRAM_NAME

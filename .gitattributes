@@ -1,0 +1,7 @@
+refs/ export-ignore
+junk/ export-ignore
+snapshot/ export-ignore
+old/ export-ignore
+backup/ export-ignore
+figs/old/ export-ignore
+old_src/ export-ignore

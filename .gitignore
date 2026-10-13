@@ -1,0 +1,34 @@
+# Binaries
+mail_cli
+mail_cli_test
+
+# Build output of tools/build
+bin/
+
+# Editor backups / swap files
+*~
+*.swp
+
+.aider*
+archive/
+old_code/
+# DEL_THIS_LINE 19871
+
+# Environment & Secrets
+.env
+.env.local
+info_private/
+private_info/
+
+# Generated shell completions (tools/gen_completions.sh; packed by package
+# recipes such as contrib/aur/PKGBUILD, never committed)
+completions/
+
+# Temporary directory and editor locks
+tmp/
+#*
+.#*
+
+# Review cycle artifacts
+reviews/archive/
+reviews/logs/

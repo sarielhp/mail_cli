@@ -1,0 +1,135 @@
+From fixture@example.com Tue Sep 01 09:00:00 2026
+From: Fixture plain-01 <plain-01@example.com>
+To: mail-cli-test@example.com
+Subject: [mail_cli-test manual] Fixture 01 - plain message
+Date: Tue, 01 Sep 2026 09:00:00 +0000
+Message-ID: <fixture-plain-01-manual@example.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+
+A plain message with nothing special about it.
+
+
+From fixture@example.com Wed Sep 02 09:00:00 2026
+From: Fixture plain-02 <plain-02@example.com>
+To: mail-cli-test@example.com
+Subject: [mail_cli-test manual] Fixture 02 - second plain
+Date: Wed, 02 Sep 2026 09:00:00 +0000
+Message-ID: <fixture-plain-02-manual@example.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+
+Another ordinary message, for move and copy assertions.
+
+
+From fixture@example.com Thu Sep 03 09:00:00 2026
+From: Fixture plain-03 <plain-03@example.com>
+To: mail-cli-test@example.com
+Subject: [mail_cli-test manual] Fixture 03 - third plain
+Date: Thu, 03 Sep 2026 09:00:00 +0000
+Message-ID: <fixture-plain-03-manual@example.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+
+A third, so a batch operation has something to batch.
+
+
+From fixture@example.com Fri Sep 04 09:00:00 2026
+From: Fixture mbox-trap <mbox-trap@example.com>
+To: mail-cli-test@example.com
+Subject: [mail_cli-test manual] Fixture 04 - body line starting with From
+Date: Fri, 04 Sep 2026 09:00:00 +0000
+Message-ID: <fixture-mbox-trap-manual@example.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+
+This body deliberately contains an mbox trap:
+>From here on the line must be escaped in an archive.
+If it is not, the archive gains a phantom message.
+
+
+From fixture@example.com Sat Sep 05 09:00:00 2026
+From: Fixture hebrew <hebrew@example.com>
+To: mail-cli-test@example.com
+Subject: [mail_cli-test manual] Fixture 05 - שלום עולם mixed direction
+Date: Sat, 05 Sep 2026 09:00:00 +0000
+Message-ID: <fixture-hebrew-manual@example.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+
+A subject mixing Hebrew and Latin, for the bidi rendering paths.
+
+
+From fixture@example.com Sun Sep 06 09:00:00 2026
+From: =?utf-8?B?SsO2cmcgTcO8bGxlcg==?= <jorg@example.com>
+To: mail-cli-test@example.com
+Subject: [mail_cli-test manual] =?utf-8?B?Rml4dHVyZSAwNiAtIErDtnJnIE3DvGxsZXIgZW5jb2RlZA==?=
+Date: Sun, 06 Sep 2026 09:00:00 +0000
+Message-ID: <fixture-encoded-manual@example.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+
+Headers here are MIME word-encoded and must be decoded on display.
+
+
+From fixture@example.com Mon Sep 07 09:00:00 2026
+From: Fixture thread-parent <thread-parent@example.com>
+To: mail-cli-test@example.com
+Subject: [mail_cli-test manual] Fixture 07 - thread parent
+Date: Mon, 07 Sep 2026 09:00:00 +0000
+Message-ID: <fixture-thread-parent-manual@example.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+
+The first message in a thread.
+
+
+From fixture@example.com Tue Sep 08 09:00:00 2026
+From: Fixture thread-reply <thread-reply@example.com>
+To: mail-cli-test@example.com
+Subject: [mail_cli-test manual] Re: Fixture 07 - thread parent
+Date: Tue, 08 Sep 2026 09:00:00 +0000
+Message-ID: <fixture-thread-reply-manual@example.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <fixture-thread-parent@example.com>
+References: <fixture-thread-parent@example.com>
+
+A reply, which should thread under fixture 07.
+
+
+From fixture@example.com Wed Sep 09 09:00:00 2026
+From: Fixture attachment <attachment@example.com>
+To: mail-cli-test@example.com
+Subject: [mail_cli-test manual] Fixture 09 - with attachment
+Date: Wed, 09 Sep 2026 09:00:00 +0000
+Message-ID: <fixture-attachment-manual@example.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="bnd42"
+
+--bnd42
+Content-Type: text/plain; charset=utf-8
+
+This message carries a small CSV attachment.
+--bnd42
+Content-Type: text/csv; name="data.csv"
+Content-Disposition: attachment; filename="data.csv"
+Content-Transfer-Encoding: base64
+
+Y29sMSxjb2wyDQoxLDINCjMsNA0K
+--bnd42--
+
+
+From fixture@example.com Thu Sep 10 09:00:00 2026
+From: Fixture spammy <spammy@example.com>
+To: mail-cli-test@example.com
+Subject: [mail_cli-test manual] Fixture 10 - WINNER!! claim your PRIZE now!!!
+Date: Thu, 10 Sep 2026 09:00:00 +0000
+Message-ID: <fixture-spammy-manual@example.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+
+CONGRATULATIONS you have WON. Click here to CLAIM your FREE PRIZE NOW!!!
+This is synthetic test content, not real spam.
+
+

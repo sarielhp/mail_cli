@@ -1,0 +1,41 @@
+---
+title: 'mail_cli spam unmark folder'
+parent: 'mail_cli spam unmark'
+---
+
+# mail\_cli spam unmark folder
+
+Mark all messages in the specified folder as ham and move them back to Inbox.
+
+## Usage
+
+```
+mail_cli spam unmark folder <folder_name>
+```
+
+## Parameters
+
+| Parameter | Description |
+|-----------|-------------|
+| `<folder_name>` | Folder name containing emails to unspam. |
+
+## Flags
+
+| Flag | Description |
+|------|-------------|
+| `-A, --account <name>` | Target account name |
+| `--account-index N` | Target account by config index (also -N) |
+| `--read-only` | Block server writes (cache still updates) |
+| `--dry-run` | Report changes only; implies --read-only |
+| `-v, --verbose` | Enable verbose output |
+| `--json` | Emit result as JSON on stdout |
+| `--logappend` | Append to existing logs instead of truncating |
+| `--version` | Print the version number and exit |
+
+## Examples
+
+- `mail_cli spam unmark folder %spam`
+
+---
+
+[↑ mail\_cli](index.md) — [nav](nav.md)

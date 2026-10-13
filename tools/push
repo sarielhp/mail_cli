@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'open3'
+
+root_dir = File.expand_path('..', __dir__)
+Dir.chdir(root_dir)
+
+branch, _, status = Open3.capture3("git rev-parse --abbrev-ref HEAD")
+unless status.success?
+  warn "Error: Unable to determine current git branch"
+  exit status.exitstatus
+end
+branch = branch.strip
+
+remote = ARGV[0] || "origin"
+target_branch = ARGV[1] || branch
+args = ARGV[2..] || []
+
+puts "Pushing branch #{branch} to #{remote}/#{target_branch}..."
+cmd = ["git", "push", remote, "#{branch}:#{target_branch}"] + args
+
+success = system(*cmd)
+unless success
+  warn "\n\e[31m✗ git push failed.\e[0m"
+  warn "Note: If running inside an isolated sandbox/container without SSH keys, push from your host shell instead: git push"
+  exit 1
+end
+
+puts "\e[32m✔ Successfully pushed #{branch} to #{remote}/#{target_branch}\e[0m"

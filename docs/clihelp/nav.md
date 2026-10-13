@@ -1,0 +1,141 @@
+---
+title: 'mail_cli — Navigation'
+---
+
+# mail\_cli — Navigation
+
+## Commands
+
+- [scan](scan.md) — Scan folders matching label prefix for spam.
+- [search](search.md) — Search email history or export to mbox.
+- [write](write.md) — Write a message in your editor, then review.
+- [tui](tui.md) — Open interactive terminal email browser.
+  - [write](tui-write.md) — Write a message in your editor, then review.
+- [watch](watch.md) — Watch accounts and notify on new mail.
+- [msg](msg.md) — Read, send, and manage messages.
+  - [show](msg-show.md) — Show emails by label prefix or message ID.
+  - [send](msg-send.md) — Send an email directly or from stdin.
+  - [reply](msg-reply.md) — Reply to an email preserving thread headers.
+  - [drafts](msg-drafts.md) — List or remove locally saved drafts.
+    - [ls](msg-drafts-ls.md) — List saved drafts, newest first.
+    - [rm](msg-drafts-rm.md) — Delete saved drafts by ID.
+    - [server](msg-drafts-server.md) — List, trash or prune drafts on the server.
+      - [ls](msg-drafts-server-ls.md) — List the drafts on the server.
+      - [rm](msg-drafts-server-rm.md) — Trash server drafts by ID, or all of them.
+      - [prune](msg-drafts-server-prune.md) — Trash superseded and already-sent drafts.
+  - [last](msg-last.md) — Show recent emails across all folders.
+  - [export](msg-export.md) — Export emails or threads to mbox or eml.
+  - [pipe](msg-pipe.md) — Pipe message raw RFC822 or body to command.
+  - [outbox](msg-outbox.md) — Manage offline outbound email queue.
+    - [ls](msg-outbox-ls.md) — List queued messages in outbox.
+    - [flush](msg-outbox-flush.md) — Transmit all queued messages in outbox.
+    - [rm](msg-outbox-rm.md) — Delete queued messages from outbox.
+  - [archive](msg-archive.md) — Archive one or more messages by ID.
+  - [block](msg-block.md) — Block the senders of messages and move them.
+- [label](label.md) — Manage labels: download, upload, sort, move.
+  - [list](label-list.md) — List all folders and labels in a tree view.
+  - [print](label-print.md) — Print all labels, one per line.
+  - [rename](label-rename.md) — Rename a label and update rules.
+  - [repair](label-repair.md) — Ensure parent folders exist for nested paths.
+  - [rm](label-rm.md) — Delete a label or folder from the server.
+  - [search](label-search.md) — Search cached labels by pattern.
+  - [cache](label-cache.md) — Manage the local labels cache.
+    - [update](label-cache-update.md) — Refresh local cache from server.
+  - [create](label-create.md) — Create a label or folder on the server.
+  - [count](label-count.md) — Count the messages in a label or folder.
+  - [archive](label-archive.md) — Archive every message in a folder.
+  - [download](label-download.md) — Download messages to local mbox file(s).
+  - [upload](label-upload.md) — Upload messages from mbox file to folder.
+  - [sort](label-sort.md) — Organize messages into dated keep/ hierarchy.
+    - [examples](label-sort-examples.md) — Show archive mapping patterns and examples.
+  - [move](label-move.md) — Move emails matching pattern to target label.
+- [mbox](mbox.md) — Inspect, validate and merge local mbox files.
+  - [check](mbox-check.md) — Validate mbox file or directory.
+  - [merge](mbox-merge.md) — Merge mbox file x into y.
+  - [info](mbox-info.md) — Display message count and file size.
+  - [view](mbox-view.md) — Browse a local mbox or .eml file in the TUI.
+- [spam](spam.md) — Manage Spam folder and train filters.
+  - [empty](spam-empty.md) — Permanently purge all emails in Spam.
+  - [sweep](spam-sweep.md) — Sweep, unsubscribe, train, and purge Spam.
+  - [learn](spam-learn.md) — Train Bogofilter on Spam messages.
+  - [pol](spam-pol.md) — Manage political spam and opt-outs.
+    - [audit](spam-pol-audit.md) — Scan Spam for political mail scoring.
+    - [unsub](spam-pol-unsub.md) — Scan Spam and execute opt-outs.
+  - [allow](spam-allow.md) — Manage sender allowlist to bypass spam.
+    - [add](spam-allow-add.md) — Add email addresses to allowlist.
+    - [rm](spam-allow-rm.md) — Remove email addresses from allowlist.
+    - [list](spam-allow-list.md) — List allowed email addresses.
+  - [block](spam-block.md) — Manage sender blocklist to classify as spam.
+    - [add](spam-block-add.md) — Add email addresses to blocklist.
+    - [rm](spam-block-rm.md) — Remove email addresses from blocklist.
+    - [list](spam-block-list.md) — List blocked email addresses.
+  - [unmark](spam-unmark.md) — Mark email as ham and return to Inbox.
+    - [folder](spam-unmark-folder.md) — Mark all messages in folder as ham.
+  - [reset](spam-reset.md) — Discard local spam scores for account.
+  - [mark](spam-mark.md) — Mark messages as spam and move to Spam.
+  - [forget](spam-forget.md) — Let the filter judge messages again.
+- [rule](rule.md) — Manage routing rules and server filters.
+  - [add](rule-add.md) — Add rule by sender or message ID.
+  - [add-title](rule-add-title.md) — Add rule matching subject prefix.
+  - [add-domain](rule-add-domain.md) — Add rule for a sender's domain.
+  - [rm](rule-rm.md) — Remove rule by sender or subject.
+  - [list](rule-list.md) — List custom routing rules.
+  - [tidy](rule-tidy.md) — Remove duplicate routing rules.
+  - [rm-all](rule-rm-all.md) — Delete all rules for account.
+  - [update](rule-update.md) — Sync blacklisted senders to rules.
+  - [push](rule-push.md) — Export local rules to server filters.
+  - [remote](rule-remote.md) — Manage remote server-side filters.
+    - [list](rule-remote-list.md) — List server-side filters for this account.
+    - [rm](rule-remote-rm.md) — Delete a server filter and its local rule.
+- [calendar](calendar.md) — Manage calendar events from attachments.
+  - [add](calendar-add.md) — Add event from email's .ics attachment.
+  - [week](calendar-week.md) — Show upcoming calendar events.
+  - [add-all](calendar-add-all.md) — Scan inbox and add all .ics events.
+  - [sync](calendar-sync.md) — Scan inbox and sync all .ics events.
+- [contacts](contacts.md) — Manage contacts and aliases.
+  - [list](contacts-list.md) — List stored contacts and aliases.
+  - [search](contacts-search.md) — Search contacts by name, email, or note.
+  - [suggest](contacts-suggest.md) — Suggest ranked recipients from history.
+  - [harvest](contacts-harvest.md) — Build suggestion index from cached mail.
+  - [import-mutt](contacts-import-mutt.md) — Import contacts from a Mutt alias file.
+  - [sync](contacts-sync.md) — Sync contacts from Google People API.
+  - [path](contacts-path.md) — Print the file path to local contacts store.
+- [account](account.md) — Configure accounts and sign in.
+  - [list](account-list.md) — List configured accounts.
+  - [add](account-add.md) — Add a new account template to config.json.
+  - [link](account-link.md) — Link program name for auto-selection.
+  - [test](account-test.md) — Check an account's config and connection.
+  - [calendar](account-calendar.md) — Show or set the calendar manager account.
+  - [login](account-login.md) — OAuth login for Gmail or Outlook.
+  - [rename](account-rename.md) — Rename an existing account's display name.
+  - [user-name](account-user-name.md) — Set the name shown in outgoing mail.
+  - [user-email](account-user-email.md) — Set the address outgoing mail is sent from.
+  - [rm](account-rm.md) — Delete an account and its credentials.
+  - [setup](account-setup.md) — Configure an email account interactively.
+  - [migrate](account-migrate.md) — Copy config and credentials via SSH.
+- [config](config.md) — Show or manage configuration options.
+  - [show](config-show.md) — Display the active configuration values.
+  - [get](config-get.md) — Print a configuration parameter's value.
+  - [set](config-set.md) — Set a configuration parameter value.
+  - [unset](config-unset.md) — Reset a configuration parameter to default.
+  - [check](config-check.md) — Validate config, DNS, and Bogofilter.
+  - [llm](config-llm.md) — Test the configured LLM endpoint.
+    - [test](config-llm-test.md) — Send a sample email to the configured LLM.
+- [utils](utils.md) — Maintain cache and shell integration.
+  - [cache](utils-cache.md) — Manage the local email download cache.
+    - [prune](utils-cache-prune.md) — Prune cached emails older than N days.
+    - [clear](utils-cache-clear.md) — Recreate cache directory and wipe data.
+    - [repair](utils-cache-repair.md) — Check and rewrite this account's index.
+  - [color](utils-color.md) — Test the terminal's true-color support.
+  - [doctor](utils-doctor.md) — Diagnose credentials, connectivity, mail flow.
+    - [run](utils-doctor-run.md) — Execute connection and integration tests.
+  - [completion](utils-completion.md) — Generate or install shell tab-completion scripts
+    - [bash](utils-completion-bash.md) — Generate Bash tab-completion script
+    - [zsh](utils-completion-zsh.md) — Generate Zsh tab-completion script
+    - [fish](utils-completion-fish.md) — Generate Fish tab-completion script
+    - [keys](utils-completion-keys.md) — Print shell key bindings (Alt-H explains the command line)
+    - [install](utils-completion-install.md) — Set up tab completion, the Alt-H key binding and the man page
+    - [uninstall](utils-completion-uninstall.md) — Remove the installed tab completion and key binding
+    - [wrap](utils-completion-wrap.md) — Generate a wrapper script with preset arguments
+  - [manpage](utils-manpage.md) — Print the manual page, or install it for man(1)
+- [docs](docs.md) — Generate Markdown help pages

@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Quality Gate & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y w3m bogofilter
+
+      - name: Verify Go Formatting
+        run: |
+          unformatted=$(gofmt -s -l .)
+          if [ -n "$unformatted" ]; then
+            echo "Files require formatting:"
+            echo "$unformatted"
+            exit 1
+          fi
+
+      - name: Go Mod Tidy Check
+        run: go mod tidy -diff
+
+      - name: Go Vet
+        run: go vet ./...
+
+      - name: Architecture Invariants Guard
+        run: ruby ./tools/arch_check.rb
+
+      - name: Run Tests
+        run: go test -v -race ./...
+
+      - name: Compile Binary
+        run: go build -v .

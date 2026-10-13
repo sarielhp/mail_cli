@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative 'tooling'
+
+# Publish the release tag, then settle the local bookkeeping the tooling's push
+# leaves behind. The Go profile's bump commits and verifies the push but never
+# tags, and this repository's GitHub Release comes from a v* tag push
+# (.github/workflows/release.yml compiles nothing; the Release carries only the
+# source GitHub generates for the tag). So tools/bump runs this once the
+# verified push has landed, and the tag names the commit that was pushed.
+Tooling.entry do
+  abort 'Usage: tools/tag' unless ARGV.empty?
+
+  _path, version = Tooling.version
+  remote, ref = Tooling.upstream
+  tag = "v#{version}"
+  # Tag the commit the verified push put on the remote branch, never whatever
+  # HEAD has become: this script is also rerun by hand after a failed tag push,
+  # and a commit made in between must not be published under the release tag.
+  sha = Tooling.git('ls-remote', '--exit-code', remote, ref).split.first
+  abort "HEAD is not the released commit #{sha}; tag it by hand if intended" unless sha == Tooling.head
+  released = Tooling.git('show', "#{sha}:#{ToolSettings::VERSION_FILE}").strip
+  abort "released commit carries version #{released}, not #{version}" unless released == version
+  Tooling.git('tag', '-a', tag, '-m', "Release #{tag}") if Tooling.git('tag', '--list', tag).strip.empty?
+  Tooling.git('push', remote, "refs/tags/#{tag}")
+  # The tag is annotated (like every tag in this repository), so the ref itself
+  # names a tag object rather than the commit; ls-remote reports the commit on a
+  # second, peeled <ref>^{} line. Accept either and require the released commit.
+  published = Tooling.git('ls-remote', '--exit-code', remote,
+                          "refs/tags/#{tag}", "refs/tags/#{tag}^{}").lines.map { |line| line.split.first }
+  abort "tag verification mismatch: expected #{sha}, got #{published.inspect}" unless published.include?(sha)
+
+  # push_release pushes <sha>:refs/heads/<branch>, which does not move the local
+  # refs/remotes/<remote>/<branch>, so a finished release otherwise reads as one
+  # unpushed commit. Refresh it; a failed fetch must not fail an already
+  # published release, so the fetch's status is deliberately ignored.
+  # The tracking ref is named after the upstream branch, which need not be the
+  # local branch's name.
+  branch = Tooling.git('symbolic-ref', '--short', 'HEAD').strip
+  name = Tooling.git('config', '--get', "branch.#{branch}.remote").strip
+  upstream_branch = ref.delete_prefix('refs/heads/')
+  Tooling.capture('git', 'fetch', name, "#{ref}:refs/remotes/#{name}/#{upstream_branch}")
+
+  puts "Tagged and verified #{tag} at #{sha}"
+end
